@@ -1,6 +1,9 @@
-{% extends "base.html" %} {%load humanize%} {% block content %}
+{% extends "base.html" %} {%load humanize%}
+{% block content %}
 <!-- Showcase -->
-<section id="showcase">
+
+
+  <section id="showcase">
     <div class="container text-center">
       <div class="home-search p-5">
         <div class="overlay p-5">
@@ -12,7 +15,8 @@
           </p>
           <div class="search">
           
-            <form action="search.html">
+            <form action={% url 'search' %} method="GET">
+              {% csrf_token %}
               <!-- Form Row 1 -->
               <div class="form-row">
                 <div class="col-md-4 mb-3">
@@ -26,12 +30,12 @@
                 </div>
 
                 <div class="col-md-4 mb-3">
-                  <label class="sr-only">street</label>
+                  <label class="sr-only">Title</label>
                   <input
                     type="text"
-                    name="street"
+                    name="title"
                     class="form-control"
-                    placeholder="Street"
+                    placeholder="Title"
                   />
                 </div>
 
@@ -41,24 +45,9 @@
                     <option selected="true" disabled="disabled">
                       District (All)
                     </option>
-                    <option value="IL">Islands</option>
-                    <option value="KT">Kwai Tsing</option>
-                    <option value="NR">North</option>
-                    <option value="SK">Sai Kung</option>
-                    <option value="ST">Sha Tin</option>
-                    <option value="TP">Tai Po</option>
-                    <option value="TW">Tsuen Wan</option>
-                    <option value="TM">Tuen Mun</option>
-                    <option value="YL">Yuen Long</option>
-                    <option value="KC">Kowloon City</option>
-                    <option value="KW">Kwun Tong</option>
-                    <option value="SS">Sham Shui Po</option>
-                    <option value="WT">Wong Tai Sin</option>
-                    <option value="YM">Yau Tsim Mong</option>
-                    <option value="CW">Central & Western</option>
-                    <option value="ER">Eastern</option>
-                    <option value="SR">Southern</option>
-                    <option value="WC">Wan Chai</option>
+                    {% for key, value in district_choices.items %}
+                        <option value="{{ key }}">{{ value }}</option>
+                    {% endfor %}
                   </select>
                 </div>
               </div>
