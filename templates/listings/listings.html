@@ -1,4 +1,7 @@
-{% extends "base.html" %} {% load humanize %} {% block content %}
+{% extends "base.html" %} {%load humanize%} 
+{% block title %} | Listings {% endblock %}
+
+{% block content %}
 {% load static %}
 
 <section id="showcase-inner" class="py-5 text-white">
@@ -27,6 +30,9 @@
       </nav>
     </div>
   </section>
+ 
+{% include 'partials/_alert.html'%} 
+
     <!-- Listings -->
     <section id="listings" class="py-4">
         <div class="container">
@@ -105,7 +111,7 @@
                     <a class="page-link" href="#">&laquo;</a>
                     </li>
                   {% endif %}
-                   
+
                 {% for num in listings.paginator.page_range %}
                   {% if listings.number == num %}
                       <li class="page-item active">

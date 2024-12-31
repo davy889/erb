@@ -1,7 +1,13 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages, auth
 from django.contrib.auth.models import User
+from contacts.models import Contact
+
 from listings.models import Listing
+import logging
+
+logger = logging.getLogger(__name__)
+
 
 # Create your views here.
 
@@ -39,8 +45,8 @@ def login(request):
             password = request.POST['password']
             user = auth.authenticate(username=username, password=password)
             if user is not None:
-                auth.login(request, user)
-                messages.success(request, 'You are now logged in as {username}.')
+                auth.login(request, user)             
+                messages.success(request, f'You are now logged in as {username}.')
                 return redirect('dashboard')
             else:
                 messages.error(request, 'Invalid username or password.')
@@ -49,12 +55,18 @@ def login(request):
                 return render(request, 'accounts/login.html')
 
 def logout(request):
+    if request.method == 'POST':
+        auth.logout(request)
+        messages.success(request, 'You are now logged out.')
     return redirect('index')
 
-def dashboard(request):
-    listings = Listing.objects.all  # Adjust the query as needed
-    context = {
-        'listings': listings
-    }
-    return render(request, 'accounts/dashboard.html', context)
 
+
+def dashboard(request):
+    user_contacts = Contact.objects.order_by('-contact_date').filter(user_id=request.user.id)
+    
+    context = {
+        'contacts': user_contacts,
+    }
+
+    return render(request, 'accounts/dashboard.html', context)
